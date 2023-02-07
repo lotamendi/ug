@@ -1,0 +1,39 @@
+{% extends 'layout/list.html' %}
+
+{% block columns %}
+	<tr>
+	<th scope="col">ID</th>
+	<th scope="col">Persona</th>
+	<th scope="col">Organismo</th>
+	<th scope="col">País</th>
+	<th scope="col">Posgrado</th>
+	<th scope="col">Graduado</th>
+	<th scope="col">Opciones</th>     
+	</tr>
+{% endblock columns %} 
+{% block rows %} 
+	{% for matricula in object_list %}
+		<tr>
+		<th scope="row">{{ matricula.id }}</th>
+		<td>{{ matricula.persona }}</td>
+		<td>{{ matricula.organismo }}</td>
+		<td>{{ matricula.pais }}</td>
+		<td>{{ matricula.posgrado }}</td>
+		<td>
+			{% if matricula.graduado == 1 %}
+				<span class="badge badge-success">Si</span>
+			{% else %}
+				<span class="badge badge-dark">No</span>
+			{% endif %}	
+		</td>
+		<td>
+			<a class="btn btn-warning btn-xs btn-flat" href="{% url 'matricula_update' matricula.id %}">
+				<i class="fas fa-edit"></i>
+			</a>
+			<a class="btn btn-danger btn-xs btn-flat" href="{% url 'matricula_delete' matricula.id %}">
+				<i class="fas fa-trash-alt"></i>
+			</a>
+		</td>
+		</tr>
+	{% endfor %} 
+{% endblock rows %}

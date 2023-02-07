@@ -1,0 +1,47 @@
+{% extends 'layout/body.html' %}
+
+{% block content %}
+<div class="card card-default">
+    <form method="post" action=".">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-trash"></i>
+                {{title}}
+            </h3>
+        </div>
+        <div class="card-body">
+            {% csrf_token %}
+            {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error</h5>
+                <ul>
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <li>
+                        {{error}}
+                    </li>
+                    {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            <div class="alert alert-warning">
+                <h5><i class="fas fa-exclamation-triangle"></i> Atención</h5>
+                {% if object.nombre %}
+                    Seguro que desea eliminar el registro <strong>{{object.nombre}}</strong>?
+                {% elif object.codigo %}
+                    Seguro que desea eliminar el registro <strong>{{object.codigo}}</strong>?
+                {% else %}
+                    Seguro que desea eliminar el registro con id {{object.id}}?
+                {% endif %}
+                
+              </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-danger"> <i class="fas fa-trash"></i> Eliminar registro</button>
+            <a class="btn btn-secondary" href="{{list_url}}" role="button"> <i class="fas fa-times"></i> Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock content %}

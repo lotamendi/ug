@@ -1,0 +1,37 @@
+{% extends 'layout/home.html' %}
+
+{% block body %}
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+    {%include 'layout/navbar.html'%}
+    {%include 'layout/sidebar.html'%}
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">{{title}}</h1>
+                    </div>
+                    {% if list_url %}
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="{% url 'home' %}">Inicio</a></li>
+                            <li class="breadcrumb-item"><a href="{{list_url}}">{{entity}}</a></li>
+                        </ol>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                {% block content %} {% endblock content %}
+            </div>
+        </section>
+      </div>
+      {%include 'layout/footer.html'%}
+    </div>
+    {% block javascript %}
+    {% endblock javascript %}
+    </body>
+{% endblock body %}

@@ -1,0 +1,48 @@
+{% extends 'layout/list.html' %}
+
+{% block columns %}
+	<tr>
+	<th scope="col">CI</th>
+	<th scope="col">Nombre (s)</th>
+	<th scope="col">1er apellido</th>
+	<th scope="col">2do apellido</th>
+	<th scope="col">Nacionalidad</th>
+	<th scope="col">Sexo</th>
+	<th scope="col">Contacto</th>   
+	<th scope="col">Opciones</th>     
+	</tr>
+{% endblock columns %} 
+{% block rows %} 
+	{% for persona in object_list %}
+		<tr>
+		<th scope="row">{{ persona.CI }}</th>
+		<td>{{ persona.nombre }}</td>
+		<td>{{ persona.apellido1 }}</td>
+		<td>{{ persona.apellido2 }}</td>
+		<td>{{ persona.nacionalidad }} <br>
+			{% if persona.pasaporte %}<i class="fas fa-passport"></i> {{ persona.pasaporte }}{% endif %}
+		</td>
+		<td>
+			{% if persona.sexo == 'M' %}
+				<span class="badge badge-primary">Masculino</span>
+			{% elif persona.sexo == 'F' %}
+				<span class="badge badge-secondary">Femenino</span>
+			{% endif %}	
+		</td>
+		<td>
+			{% if persona.domicilio %}<i class="fas fa-map-marker-alt"></i> {{ persona.domicilio }}<br>{% endif %}
+			{% if persona.telefono %}<i class="fas fa-phone-alt"></i> {{ persona.telefono }}<br>{% endif %}
+			{% if persona.correo %}<i class="fas fa-envelope"></i> {{ persona.correo }}{% endif %}
+		</td>
+
+		<td>
+			<a class="btn btn-warning btn-xs btn-flat" href="{% url 'persona_update' persona.CI %}">
+				<i class="fas fa-edit"></i>
+			</a>
+			<a class="btn btn-danger btn-xs btn-flat" href="{% url 'persona_delete' persona.CI %}">
+				<i class="fas fa-trash-alt"></i>
+			</a>
+		</td>
+		</tr>
+	{% endfor %} 
+{% endblock rows %}

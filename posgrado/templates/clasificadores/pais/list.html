@@ -1,0 +1,29 @@
+{% extends 'layout/list.html' %}
+
+{% block columns %}
+	<tr>
+	<th scope="col">ID</th>
+	<th scope="col">Nombre</th>
+	<th scope="col">Sigla</th>
+	<th scope="col">Área</th>
+	<th scope="col">Opciones</th>     
+	</tr>
+{% endblock columns %} 
+{% block rows %} 
+	{% for pais in object_list %}
+		<tr>
+		<th scope="row">{{ pais.id }}</th>
+		<td>{{ pais.nombre }}</td>
+		<td>{{ pais.sigla }}</td>
+		<td>{{ pais.area }}</td>
+		<td>
+			<a class="btn btn-warning btn-xs btn-flat" href="{% url 'pais_update' pais.id %}">
+				<i class="fas fa-edit"></i>
+			</a>
+			<a class="btn btn-danger btn-xs btn-flat" href="{% url 'pais_delete' pais.id %}">
+				<i class="fas fa-trash-alt"></i>
+			</a>
+		</td>
+		</tr>
+	{% endfor %} 
+{% endblock rows %}

@@ -1,0 +1,53 @@
+{% extends 'layout/list.html' %}
+
+{% block columns %}
+	<tr>
+	<th scope="col">ID</th>
+	<th scope="col">Nombre</th>
+	<th scope="col">Codigo</th>
+	<th scope="col">Facultad</th>
+	<th scope="col">Modalidad</th>
+	<th scope="col">Forma</th>
+	<th scope="col">Ejecutado en CUM</th>
+	<th scope="col">Ejecutado en otro país</th>
+	<th scope="col">Inicio</th>
+	<th scope="col">Final</th>     
+	<th scope="col">Opciones</th>     
+	</tr>
+{% endblock columns %} 
+{% block rows %} 
+	{% for posgrado in object_list %}
+		<tr>
+		<th scope="row">{{ posgrado.id }}</th>
+		<td>{{ posgrado.nombre }}</td>
+		<td>{{ posgrado.codigo }}</td>
+		<td>{{ posgrado.facultad }}</td>
+		<td>{{ posgrado.modalidad }}</td>
+		<td>{{ posgrado.forma }}</td>
+		<td>
+			{% if posgrado.cum == True %}
+				<span class="badge bg-success">Si</span>
+			{% else %}
+				<span class="badge bg-danger">No</span>
+			{% endif %}	
+		</td>
+		<td>
+			{% if posgrado.pais == True %}
+				<span class="badge bg-success">Si</span>
+			{% else %}
+				<span class="badge bg-danger">No</span>
+			{% endif %}	
+		</td>
+		<td>{{ posgrado.fecha_inicio }}</td>
+		<td>{{ posgrado.fecha_fin }}</td>
+		<td>
+			<a class="btn btn-warning btn-xs btn-flat" href="{% url 'posgrado_update' posgrado.id %}">
+				<i class="fas fa-edit"></i>
+			</a>
+			<a class="btn btn-danger btn-xs btn-flat" href="{% url 'posgrado_delete' posgrado.id %}">
+				<i class="fas fa-trash-alt"></i>
+			</a>
+		</td>
+		</tr>
+	{% endfor %} 
+{% endblock rows %}

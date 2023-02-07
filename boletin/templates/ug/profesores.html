@@ -1,0 +1,216 @@
+{% load static %}
+<section id="profesores" class="about">
+  <div class="container" data-aos="fade-up">
+    <div class="row">
+      <div
+        class="col-lg-6 order-1 order-lg-2"
+        data-aos="fade-left"
+        data-aos-delay="100"
+      >
+        <img src="{% static 'Gp/img/about.jpg' %}" class="img-fluid" alt="" />
+      </div>
+      <div
+        class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content"
+        data-aos="fade-right"
+        data-aos-delay="100"
+      >
+        <h3>Profesores.</h3>
+        <p class="fst-italic">
+          Contamos con un total de {{data.profesores.total}} profesores
+          preparados para impartir conocimiento...
+        </p>
+
+        <ul class="nav nav-pills mb-3" role="tablist">
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              data-bs-toggle="pill"
+              href="#tab1"
+              aria-selected="true"
+              role="tab"
+            >
+              Por sexo
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              data-bs-toggle="pill"
+              href="#tab2"
+              aria-selected="false"
+              role="tab"
+            >
+              Por categoría
+            </a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade active show" id="tab1" role="tabpanel">
+            <canvas
+              id="chartProfSex"
+              style="
+                min-height: 250px;
+                height: 250px;
+                max-height: 250px;
+                max-width: 100%;
+                display: block;
+                width: 405px;
+              "
+              class="chartjs-render-monitor"
+              width="405"
+              height="250"
+            ></canvas>
+          </div>
+          <div class="tab-pane fade" id="tab2" role="tabpanel">
+            <canvas
+              id="chartProfCat"
+              style="
+                min-height: 250px;
+                height: 250px;
+                max-height: 250px;
+                max-width: 100%;
+                display: block;
+                width: 405px;
+              "
+              class="chartjs-render-monitor"
+              width="405"
+              height="250"
+            ></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% block javascript %}
+<script>
+  const chartProfSex = document.getElementById('chartProfSex');
+
+  new Chart(chartProfSex, {
+    type: 'pie',
+    data: {
+      labels: [
+          'Mujeres',
+          'Hombres'
+      ],
+      datasets: [{
+          data: [{{data.profesores.mujeres}}, {{data.profesores.hombres}}],
+          backgroundColor: [
+              'rgb(255, 99, 132)',
+              'rgb(54, 162, 235)'
+          ],
+          hoverOffset: 4
+      }]
+    }
+  });
+
+
+  const chartProfCat = document.getElementById('chartProfCat');
+
+  new Chart(chartProfCat, {
+    type: 'bar',
+    data: {
+      labels: [
+        'Científica',
+        'Docente'
+      ],
+      datasets: [
+        {
+          label: 'Licenciado',
+          data: [65, 0],
+          borderWidth: 1,
+        },
+        {
+          label: 'Master',
+          data: [23, 0],
+          borderWidth: 1,
+        },
+        {
+          label: 'Doctor',
+          data: [32, 0],
+          borderWidth: 1,
+        },
+        {
+          label: 'Instructor',
+          data: [0, 32],
+          borderWidth: 1,
+        },
+        {
+          label: 'Asistente',
+          data: [0, 37],
+          borderWidth: 1,
+        },
+        {
+          label: 'Auxiliar',
+          data: [0, 34],
+          borderWidth: 1,
+        },
+        {
+          label: 'Titular',
+          data: [0, 11],
+          borderWidth: 1,
+        },
+      ]
+    },
+    options: {
+      plugins: {
+        legend: {
+          position: 'left',
+          /*onHover: function handleHover(evt, item, legend){
+            legend.chart.data.datasets.forEach((color, index, dataset) => {
+              console.log(dataset[index].backgroundColor);
+              dataset[index].backgroundColor = index === item.index || color.length === 9 ? color : color + '4D';
+            });
+            // legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+            //  colors[index] = index === item.index || color.length === 9 ? color : color + '4D';
+            //});
+            legend.chart.update();
+          },*/
+          /*onLeave: function handleLeave(evt, item, legend){
+            // legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+            //   colors[index] = color.length === 9 ? color.slice(0, -2) : color;
+            // });
+            legend.chart.update();
+          },*/
+        },
+        title: {
+          display: true,
+          text: 'Por Categoría'
+        },
+      },
+      scales: {
+        x: {
+          stacked: true
+        },
+        y: {
+          stacked: true
+        }
+      },
+    }
+  });
+</script>
+{% endblock javascript %}
+
+
+
+{% comment %} data: {
+  
+  options: {
+    scales: {
+      xAxes: [{
+        stacked: true
+      }],
+      yAxes: [{
+        stacked: true
+      }]
+    },
+    title:{
+      display: true,
+      text: 'Categoriasdsd'
+    },
+    legend: {
+      display: false
+    }
+  }
+} {% endcomment %}

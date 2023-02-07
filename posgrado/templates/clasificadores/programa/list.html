@@ -1,0 +1,27 @@
+{% extends 'layout/list.html' %}
+
+{% block columns %}
+	<tr>
+	<th scope="col">Codigo</th>
+	<th scope="col">Rama</th>
+	<th scope="col">Tipo</th>
+	<th scope="col">Opciones</th>     
+	</tr>
+{% endblock columns %} 
+{% block rows %} 
+	{% for programa in object_list %}
+		<tr>
+		<th scope="row">{{ programa.codigo }}</th>
+		<td>{{ programa.rama }}</td>
+		<td>{{ programa.tipo }}</td>
+		<td>
+			<a class="btn btn-warning btn-xs btn-flat" href="{% url 'programa_update' programa.codigo %}">
+				<i class="fas fa-edit"></i>
+			</a>
+			<a class="btn btn-danger btn-xs btn-flat" href="{% url 'programa_delete' programa.codigo %}">
+				<i class="fas fa-trash-alt"></i>
+			</a>
+		</td>
+		</tr>
+	{% endfor %} 
+{% endblock rows %}

@@ -1,0 +1,69 @@
+{% extends 'layout/body.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-info">
+      <div class="inner">
+        <h3>{{data.posgrados}}</h3>
+        <p>Posgrados impartidos</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-file"></i>
+      </div>
+      <a href="{% url 'posgrado_list' %}" class="small-box-footer">
+        Más información <i class="fas fa-arrow-circle-right"></i>
+      </a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-success">
+      <div class="inner">
+        <h3>{{data.personas}}</h3>
+        <p>Personas registradas</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <a href="{% url 'persona_list' %}" class="small-box-footer">
+        Más información <i class="fas fa-arrow-circle-right"></i>
+      </a>
+    </div>
+  </div>
+  <!-- ./col -->
+  <div class="col-lg-3 col-6">
+    <!-- small card -->
+    <div class="small-box bg-warning">
+      <div class="inner">
+        <h3>{{data.matriculas}}</h3>
+
+        <p>Matrículas completadas</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-book"></i>
+      </div>
+      <a href="{% url 'matricula_list' %}" class="small-box-footer">
+        Más información <i class="fas fa-arrow-circle-right"></i>
+      </a>
+    </div>
+  </div>
+  <!-- ./col -->
+  <div class="col-lg-3 col-6">
+    <!-- small card -->
+    <div class="small-box bg-danger">
+      <div class="inner">
+        <h3>{{data.certificados}}</h3>
+
+        <p>Certificados entregados</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-certificate"></i>
+      </div>
+      <a href="#" class="small-box-footer">
+        Más información <i class="fas fa-arrow-circle-right"></i>
+      </a>
+    </div>
+  </div>
+  <!-- ./col -->
+</div>
+{% endblock content %}
