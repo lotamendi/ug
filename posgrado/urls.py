@@ -2,7 +2,7 @@ from django.urls import include, path
 from posgrado.views import *
 
 urlpatterns = [
-    path('', DashboardView.as_view(), name='home'),
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
     # Clasificadores
     path('clasificadores/', include('posgrado.templates.clasificadores.urls')),
     # Modelos

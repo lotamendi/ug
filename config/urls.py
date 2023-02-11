@@ -20,6 +20,7 @@ from boletin.views import IndexView
 
 urlpatterns = [
     path('', IndexView.as_view(), name="index"),
+    path('login/', include('login.urls')),
     path('posgrado/', include('posgrado.urls')),
     path('admin/', admin.site.urls),
 ]

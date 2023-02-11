@@ -1,5 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 from posgrado.models.clasif import *
 from posgrado.models.models import *
@@ -8,6 +10,7 @@ from posgrado.forms import *
 # Home
 class DashboardView(TemplateView):
     template_name = "dashboard.html"
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = 'Inicio'
@@ -24,6 +27,10 @@ class DashboardView(TemplateView):
 class FacultadListView(ListView):
     model = Facultad
     template_name = "clasificadores/facultad/list.html"
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = 'Clasificador de facultades'

@@ -5,9 +5,13 @@ db.sqlite3
 # Ficheros de cache de Python
 boletin/__pycache__/
 boletin/migrations/__pycache__/
+boletin/migrations/
 posgrado/__pycache__/
 posgrado/migrations/__pycache__/
 posgrado/models/__pycache__/
 posgrado/templates/clasificadores/__pycache__/
 config/__pycache__/
-boletin/migrations/__init__.py
+login/__pycache__/
+login/migrations/__pycache__/
+login/migrations/
+.gitignore
