@@ -37,6 +37,12 @@ class LoginFormView2(FormView):
 class LoginFormView(LoginView):
     template_name = 'login.html'
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        for field in self.form_class.base_fields:
+            self.form_class.base_fields[field].widget.attrs.update({'class' : 'form-control'})
+        # self.form_class.base_fields['username'].widget.attrs.update({'class' : 'form-control'})
+
     def dispatch(self, request, *args, **kwargs):
         print(request.user.username)
         if(request.user.is_authenticated):
@@ -47,3 +53,7 @@ class LoginFormView(LoginView):
         context = super().get_context_data(**kwargs)
         context["title"] = 'Iniciar sesión'
         return context
+    
+    def post(self, request, *args, **kwargs):
+        print(self.form_class)
+        return super().post(request, *args, **kwargs)

@@ -24,21 +24,22 @@
       <form action="." method="post">
         <input type="hidden" value="{{next}}" name="next">
         {% csrf_token %}
-        {% if form.errors %}
+        {% comment %} {% if form.errors %}
         <div class="alert alert-danger alert-dismissible">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
           <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error</h5>
           <ul>
-              {% for field in form %}
-              {% for error in field.errors %}
-              <li>
-                  {{error}}
-              </li>
-              {% endfor %}
-              {% endfor %}
+          {% for field in form %}
+            {% for error in field.errors %}
+              <li>{{error}}</li>
+            {% endfor %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+              <li>{{error}}</li>
+          {% endfor %}
           </ul>
-      </div>
-        {% endif %}
+        </div>
+        {% endif %}  {% endcomment %}
         <div class="input-group mb-3">
           {% comment %} <input type="email" class="form-control" placeholder="Email"> {% endcomment %}
           {{form.username}}
@@ -89,6 +90,9 @@
       {% for error in field.errors %}
         errors += '{{error}}\n';
       {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+      errors += '{{error}}\n';
     {% endfor %}
     Toast.fire({
       icon: 'error', // success,info, error, warning, question

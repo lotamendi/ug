@@ -2,6 +2,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from posgrado.models.clasif import *
 from posgrado.models.models import *
@@ -24,10 +25,10 @@ class DashboardView(TemplateView):
     
 # Clasificadores
 #  Facultad
-class FacultadListView(ListView):
+class FacultadListView(LoginRequiredMixin, ListView):
     model = Facultad
     template_name = "clasificadores/facultad/list.html"
-    @method_decorator(login_required)
+    # @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
     
@@ -326,6 +327,7 @@ class PersonaCreateView(CreateView):
         context['list_url'] = reverse_lazy('persona_list')
         context['action'] = 'add'
         return context
+        
 class PersonaUpdateView(UpdateView):
     model = Persona
     template_name = "persona/create.html"

@@ -121,11 +121,25 @@
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
       </li>
+      {% if request.user.username %}
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'logout' %}" role="button">
-          <i class="fas fa-power-off"></i>
+        <span class="navbar-text">
+          <i class="fas fa-user"></i>
+          {{request.user.username}}
+        </span>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout' %}" role="button" title="Cerrar sesión">
+          <i class="fas fa-sign-out-alt"></i>
         </a>
       </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'login' %}" role="button">
+          <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+        </a>
+      </li>
+      {% endif %}
       <!-- <li class="nav-item">
         <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
           <i class="fas fa-th-large"></i>
