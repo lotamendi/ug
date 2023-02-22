@@ -11,6 +11,9 @@ SQLITE = {
     }
 }
 
+# Se deben instalar los paquetes para trabajar con este driver
+# pip install mysql-connector
+# pip install mysql
 MYSQL = {
     'default' : {
         'ENGINE' : 'django.db.backends.mysql',
