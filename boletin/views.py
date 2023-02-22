@@ -22,8 +22,19 @@ class IndexView(TemplateView):
           },
           'profesores' : {
             'total': 500,
-            'hombres': 15,
-            'mujeres':45
+            'sexo' : {
+              'hombres': 15,
+              'mujeres':45
+            },
+            'categoria' : {
+              'licenciado' : 0,
+              'master' : 0,
+              'doctor' : 0,
+              'instructor' : 0,
+              'asistente' : 0,
+              'auxiliar' : 0,
+              'titular' : 0
+            }
           },
           'cursos' : {
             'regular_diurno' : 15,
