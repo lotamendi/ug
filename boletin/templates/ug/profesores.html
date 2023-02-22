@@ -95,7 +95,7 @@
           'Hombres'
       ],
       datasets: [{
-          data: [{{data.profesores.mujeres}}, {{data.profesores.hombres}}],
+          data: [{{data.profesores.sexo.mujeres}}, {{data.profesores.sexo.hombres}}],
           backgroundColor: [
               'rgb(255, 99, 132)',
               'rgb(54, 162, 235)'
@@ -118,37 +118,37 @@
       datasets: [
         {
           label: 'Licenciado',
-          data: [65, 0],
+          data: [{{data.profesores.categoria.licenciado}}, 0],
           borderWidth: 1,
         },
         {
           label: 'Master',
-          data: [23, 0],
+          data: [{{data.profesores.categoria.master}}, 0],
           borderWidth: 1,
         },
         {
           label: 'Doctor',
-          data: [32, 0],
+          data: [{{data.profesores.categoria.doctor}}, 0],
           borderWidth: 1,
         },
         {
           label: 'Instructor',
-          data: [0, 32],
+          data: [0, {{data.profesores.categoria.instructor}}],
           borderWidth: 1,
         },
         {
           label: 'Asistente',
-          data: [0, 37],
+          data: [0, {{data.profesores.categoria.asistente}}],
           borderWidth: 1,
         },
         {
           label: 'Auxiliar',
-          data: [0, 34],
+          data: [0, {{data.profesores.categoria.auxiliar}}],
           borderWidth: 1,
         },
         {
           label: 'Titular',
-          data: [0, 11],
+          data: [0, {{data.profesores.categoria.titular}}],
           borderWidth: 1,
         },
       ]

@@ -12,6 +12,9 @@
           <li><a class="nav-link scrollto" href="#profesores">Profesores</a></li>
           <li><a class="nav-link scrollto " href="#cursos">Cursos</a></li>
           <li><a class="nav-link scrollto" href="#otros">Otros</a></li>
+          {% if request.user.username %}
+          <li><a class="nav-link" href="#">Bienvenid@ <i class="fas fa-user mr-2"></i> {{request.user.username}}</a></li>
+          {% endif %}
           {% comment %} <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
               <li><a href="#">Drop Down 1</a></li>
@@ -30,12 +33,25 @@
             </ul>
           </li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li> {% endcomment %}
+          
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
       <!-- <a href="#about" class="get-started-btn scrollto">Get Started</a> -->
-      <a href="{% url 'login' %}" class="get-started-btn scrollto">Login</a>
+  
+      {% if request.user.username %}
+        <a href="{% url 'logout' %}" class="get-started-btn scrollto" title="Cerrar sesión">
+          <i class="fas fa-sign-out-alt"></i>
+        </a>
+      {% else %}
+        <a href="{% url 'login' %}" class="get-started-btn scrollto">
+          <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+        </a>
+      {% endif %} 
+      <a href="{% url 'login' %}" class="get-started-btn scrollto">
+        <i class="fas fa-shield-alt"></i> Administrar
+      </a>
 
     </div>
   </header>
