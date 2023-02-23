@@ -2,7 +2,7 @@
 
 {% block columns %}
 	<tr>
-	<th scope="col">Codigo</th>
+	<th scope="col">Código</th>
 	<th scope="col">Rama</th>
 	<th scope="col">Tipo</th>
 	<th scope="col">Opciones</th>     
@@ -15,12 +15,14 @@
 		<td>{{ programa.rama }}</td>
 		<td>{{ programa.tipo }}</td>
 		<td>
-			<a class="btn btn-warning btn-xs btn-flat" href="{% url 'programa_update' programa.codigo %}">
-				<i class="fas fa-edit"></i>
-			</a>
-			<a class="btn btn-danger btn-xs btn-flat" href="{% url 'programa_delete' programa.codigo %}">
-				<i class="fas fa-trash-alt"></i>
-			</a>
+			<div class="btn-group btn-group-sm" role="group">
+				<a class="btn btn-warning" href="{% url 'programa_update' programa.codigo %}">
+					<i class="fas fa-edit"></i>
+				</a>
+				<a class="btn btn-danger" href="{% url 'programa_delete' programa.codigo %}">
+					<i class="fas fa-trash-alt"></i>
+				</a>
+			</div>
 		</td>
 		</tr>
 	{% endfor %} 

@@ -2,7 +2,6 @@
 
 {% block columns %}
 	<tr>
-	<th scope="col">ID</th>
 	<th scope="col">Nombre</th>
 	<th scope="col">Sigla</th>
 	<th scope="col">Opciones</th>     
@@ -11,16 +10,17 @@
 {% block rows %} 
 	{% for fp in object_list %}
 		<tr>
-		<th scope="row">{{ fp.id }}</th>
 		<td>{{ fp.nombre }}</td>
-		<td>{{ fp.abrev }}</td>
+		<th scope="row">{{ fp.abrev }}</th>
 		<td>
-			<a class="btn btn-warning btn-xs btn-flat" href="{% url 'forma_posgrado_update' fp.id %}">
-				<i class="fas fa-edit"></i>
-			</a>
-			<a class="btn btn-danger btn-xs btn-flat" href="{% url 'forma_posgrado_delete' fp.id %}">
-				<i class="fas fa-trash-alt"></i>
-			</a>
+			<div class="btn-group btn-group-sm" role="group">
+				<a class="btn btn-warning" href="{% url 'forma_posgrado_update' fp.id %}">
+					<i class="fas fa-edit"></i>
+				</a>
+				<a class="btn btn-danger" href="{% url 'forma_posgrado_delete' fp.id %}">
+					<i class="fas fa-trash-alt"></i>
+				</a>
+			</div>
 		</td>
 		</tr>
 	{% endfor %} 

@@ -2,9 +2,8 @@
 
 {% block columns %}
 	<tr>
-	<th scope="col">ID</th>
 	<th scope="col">Nombre</th>
-	<th scope="col">Codigo</th>
+	<th scope="col">Código</th>
 	<th scope="col">Facultad</th>
 	<th scope="col">Modalidad</th>
 	<th scope="col">Forma</th>
@@ -18,8 +17,7 @@
 {% block rows %} 
 	{% for posgrado in object_list %}
 		<tr>
-		<th scope="row">{{ posgrado.id }}</th>
-		<td>{{ posgrado.nombre }}</td>
+		<th scope="row">{{ posgrado.nombre }}</th>
 		<td>{{ posgrado.codigo }}</td>
 		<td>{{ posgrado.facultad }}</td>
 		<td>{{ posgrado.modalidad }}</td>
@@ -41,12 +39,14 @@
 		<td>{{ posgrado.fecha_inicio }}</td>
 		<td>{{ posgrado.fecha_fin }}</td>
 		<td>
-			<a class="btn btn-warning btn-xs btn-flat" href="{% url 'posgrado_update' posgrado.id %}">
-				<i class="fas fa-edit"></i>
-			</a>
-			<a class="btn btn-danger btn-xs btn-flat" href="{% url 'posgrado_delete' posgrado.id %}">
-				<i class="fas fa-trash-alt"></i>
-			</a>
+			<div class="btn-group btn-group-sm" role="group">
+				<a class="btn btn-warning" href="{% url 'posgrado_update' posgrado.id %}">
+					<i class="fas fa-edit"></i>
+				</a>
+				<a class="btn btn-danger" href="{% url 'posgrado_delete' posgrado.id %}">
+					<i class="fas fa-trash-alt"></i>
+				</a>
+			</div>
 		</td>
 		</tr>
 	{% endfor %} 
