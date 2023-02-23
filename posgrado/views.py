@@ -16,10 +16,10 @@ class DashboardView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["title"] = 'Inicio'
         context['data'] = {
-            'posgrados': 45,
-            'personas': 4,
-            'matriculas' : 54,
-            'certificados' : 5
+            'posgrados': Posgrado.objects.count(),
+            'personas': Persona.objects.count(),
+            'matriculas' : Matricula.objects.count(),
+            'certificados' : Certificado.objects.count()
         }
         return context
     
