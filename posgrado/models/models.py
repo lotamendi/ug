@@ -30,12 +30,12 @@ class Persona(models.Model):
     nombre = models.CharField(max_length = 50, null=False)
     apellido1 = models.CharField(max_length = 50, null=False)
     apellido2 = models.CharField(max_length = 50, null=False)
-    nacionalidad = models.CharField(max_length = 20, default='Cubana', blank=False)
-    pasaporte = models.CharField(max_length = 20, blank=True)
+    pais = models.ForeignKey(Pais, on_delete=models.CASCADE, verbose_name="País")
+    pasaporte = models.CharField(max_length = 20, null=True)
     sexo = models.CharField( max_length=10, choices=gender_choices, verbose_name='Sexo')
-    domicilio = models.CharField(max_length=150, blank=False)
-    telefono = models.CharField(max_length = 20, blank=True)
-    correo = models.EmailField(max_length=50, blank=True)
+    domicilio = models.CharField(max_length=150, default='No definido')
+    telefono = models.CharField(max_length = 20, null=True)
+    correo = models.EmailField(max_length=50, null=True)
         
 
     class Meta:
@@ -47,10 +47,9 @@ class Persona(models.Model):
         return self.nombre + ' ' + self.apellido1 + ' ' + self.apellido2
 
 class Matricula(models.Model):
-    persona = models.OneToOneField(Persona, on_delete=models.CASCADE)
-    organismo = models.OneToOneField(Organismo, on_delete=models.CASCADE)
-    pais = models.OneToOneField(Pais, on_delete=models.CASCADE, verbose_name="País")
-    posgrado = models.OneToOneField(Posgrado, on_delete=models.CASCADE)
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    organismo = models.ForeignKey(Organismo, on_delete=models.CASCADE)
+    posgrado = models.ForeignKey(Posgrado, on_delete=models.CASCADE)
     graduado = models.BooleanField(default=False)
 
     class Meta:
@@ -62,8 +61,8 @@ class Matricula(models.Model):
         return self.persona.nombre
 
 class Certificado(models.Model):
-    persona = models.OneToOneField(Persona, on_delete=models.CASCADE)
-    posgrado = models.OneToOneField(Posgrado, on_delete=models.CASCADE)
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    posgrado = models.ForeignKey(Posgrado, on_delete=models.CASCADE)
     emitido = models.CharField(max_length = 150)
     firmado = models.CharField(max_length = 150)
     
