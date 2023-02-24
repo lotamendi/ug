@@ -6,7 +6,7 @@
 	<th scope="col">Nombre (s)</th>
 	<th scope="col">1er apellido</th>
 	<th scope="col">2do apellido</th>
-	<th scope="col">Nacionalidad</th>
+	<th scope="col">País</th>
 	<th scope="col">Sexo</th>
 	<th scope="col">Contacto</th>   
 	<th scope="col">Opciones</th>     
@@ -19,7 +19,7 @@
 		<td>{{ persona.nombre }}</td>
 		<td>{{ persona.apellido1 }}</td>
 		<td>{{ persona.apellido2 }}</td>
-		<td>{{ persona.nacionalidad }} <br>
+		<td>{{ persona.pais }} <br>
 			{% if persona.pasaporte %}<i class="fas fa-passport"></i> {{ persona.pasaporte }}{% endif %}
 		</td>
 		<td>
@@ -36,12 +36,14 @@
 		</td>
 
 		<td>
-			<a class="btn btn-warning btn-xs btn-flat" href="{% url 'persona_update' persona.CI %}">
-				<i class="fas fa-edit"></i>
-			</a>
-			<a class="btn btn-danger btn-xs btn-flat" href="{% url 'persona_delete' persona.CI %}">
-				<i class="fas fa-trash-alt"></i>
-			</a>
+			<div class="btn-group btn-group-sm" role="group">
+				<a class="btn btn-warning" href="{% url 'persona_update' persona.CI %}">
+					<i class="fas fa-edit"></i>
+				</a>
+				<a class="btn btn-danger" href="{% url 'persona_delete' persona.CI %}">
+					<i class="fas fa-trash-alt"></i>
+				</a>
+			</div>
 		</td>
 		</tr>
 	{% endfor %} 

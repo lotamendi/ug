@@ -17,7 +17,7 @@
 		<th scope="row">{{ matricula.id }}</th>
 		<td>{{ matricula.persona }}</td>
 		<td>{{ matricula.organismo }}</td>
-		<td>{{ matricula.pais }}</td>
+		<td>{{ matricula.persona.pais.nombre }}</td>
 		<td>{{ matricula.posgrado }}</td>
 		<td>
 			{% if matricula.graduado == 1 %}
@@ -27,12 +27,14 @@
 			{% endif %}	
 		</td>
 		<td>
-			<a class="btn btn-warning btn-xs btn-flat" href="{% url 'matricula_update' matricula.id %}">
-				<i class="fas fa-edit"></i>
-			</a>
-			<a class="btn btn-danger btn-xs btn-flat" href="{% url 'matricula_delete' matricula.id %}">
-				<i class="fas fa-trash-alt"></i>
-			</a>
+			<div class="btn-group btn-group-sm" role="group">
+				<a class="btn btn-warning" href="{% url 'matricula_update' matricula.id %}">
+					<i class="fas fa-edit"></i>
+				</a>
+				<a class="btn btn-danger" href="{% url 'matricula_delete' matricula.id %}">
+					<i class="fas fa-trash-alt"></i>
+				</a>
+			</div>
 		</td>
 		</tr>
 	{% endfor %} 
