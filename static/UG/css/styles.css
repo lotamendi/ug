@@ -1,0 +1,4 @@
+table tbody tr td.done, table tbody tr th.done{
+    color: #697582;
+    text-decoration: line-through;
+}

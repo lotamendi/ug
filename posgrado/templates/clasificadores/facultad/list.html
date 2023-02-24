@@ -2,6 +2,7 @@
 
 {% block columns %}
 	<tr>
+	<th scope="col"></th>
 	<th scope="col">Nombre</th>
 	<th scope="col">Abreviatura</th>
 	<th scope="col">Opciones</th>     
@@ -10,8 +11,6 @@
 {% block rows %} 
 	{% for facultad in object_list %}
 		<tr>
-		<th scope="row">{{ facultad.nombre }}</th>
-		<td>{{ facultad.abrev }}</td>
 		<td>
 			<div class="btn-group btn-group-sm" role="group">
 				{% if facultad.activo == True %}
@@ -22,7 +21,12 @@
 				<a class="btn btn-info" href="{% url 'facultad_active' facultad.id %}">
 					<i class="fas fa-eye"></i>
 				</a>
-				{% endif %}
+				{% endif %}</td>
+			</div>
+		<th {% if not facultad.activo %} class='done' {% endif %} scope="row">{{ facultad.nombre }}</th>
+		<td {% if not facultad.activo %} class='done' {% endif %}>{{ facultad.abrev }}</td>
+		<td>
+			<div class="btn-group btn-group-sm" role="group">
 				<a class="btn btn-warning" href="{% url 'facultad_update' facultad.id %}">
 					<i class="fas fa-edit"></i>
 				</a>

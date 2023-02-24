@@ -4,6 +4,7 @@ from django.db import models
 class Facultad(models.Model):
     nombre = models.CharField(max_length = 150)
     abrev = models.CharField(max_length = 20, blank = False)
+    activo = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "_Facultad"

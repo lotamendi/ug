@@ -1,10 +1,11 @@
 from django.urls import path
-from posgrado.views import *
+from posgrado.templates.clasificadores.views import *
 
 urlpatterns = [
     path('facultad/list/', FacultadListView.as_view(), name='facultad_list'),
     path('facultad/add/', FacultadCreateView.as_view(), name='facultad_create'),
     path('facultad/update/<int:pk>/', FacultadUpdateView.as_view(), name='facultad_update'),
+    path('facultad/active/<int:pk>/', FacultadActiveView.as_view(), name='facultad_active'),
     path('facultad/delete/<int:pk>/', FacultadDeleteView.as_view(), name='facultad_delete'),
     path('organismo/list/', OrganismoListView.as_view(), name='organismo_list'),
     path('organismo/add/', OrganismoCreateView.as_view(), name='organismo_create'),

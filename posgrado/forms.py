@@ -13,6 +13,7 @@ class C_FacultadForm(ModelForm):
     class Meta:
         model = Facultad
         fields = '__all__'
+        exclude = ['activo']
 class C_OrganismoForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -59,6 +60,7 @@ class PosgradoForm(ModelForm):
             form.field.widget.attrs.update({'class': 'form-control'})
             # form.field.widget.attrs['class'] = 'form-control' # form-control-border
         self.fields['nombre'].widget.attrs['autofocus'] = True
+        self.fields['facultad'].queryset = Facultad.objects.filter(activo=1)
     class Meta:
         model = Posgrado
         fields = '__all__'
