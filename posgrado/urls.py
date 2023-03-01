@@ -1,4 +1,5 @@
 from django.urls import include, path
+from posgrado.templates.reportes.views import *
 from posgrado.views import *
 
 urlpatterns = [
@@ -18,4 +19,6 @@ urlpatterns = [
     path('matricula/add/', MatriculaCreateView.as_view(), name='matricula_create'),
     path('matricula/update/<int:pk>/', MatriculaUpdateView.as_view(), name='matricula_update'),
     path('matricula/delete/<int:pk>/', MatriculaDeleteView.as_view(), name='matricula_delete'),
+    # Reportes
+    path('reports/pg14/', Reporte_PG14_View.as_view(), name='rep_pg14')
 ]

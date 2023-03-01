@@ -1,0 +1,95 @@
+{% extends 'layout/body.html' %}
+{% load static %}
+{% block head %}
+	<link rel="stylesheet" type="text/css" href=" {% static 'datatable/DataTables-1.13.1/css/dataTables.bootstrap4.min.css' %}"/>
+	<link rel="stylesheet" type="text/css" href=" {% static 'datatable/Responsive-2.4.0/css/responsive.bootstrap4.min.css' %}"/>
+	<script type="text/javascript" src=" {% static 'datatable/DataTables-1.13.1/js/jquery.dataTables.min.js' %}"></script>
+	<script type="text/javascript" src=" {% static 'datatable/DataTables-1.13.1/js/dataTables.bootstrap4.min.js' %}"></script>
+	<script type="text/javascript" src=" {% static 'datatable/Responsive-2.4.0/js/dataTables.responsive.min.js' %}"></script>
+	<script type="text/javascript" src=" {% static 'datatable/Responsive-2.4.0/js/responsive.bootstrap4.js' %}"></script>
+{% endblock head %}
+
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <div class="form-group">
+        <label for="selectPrograma">Seleccione un programa de posgrado</label>
+        <select class="form-control" id="selectPrograma">
+            {% for posgrado in data.posgrados %}
+                <option value="{{posgrado.id}}">{{posgrado.nombre}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <table class="table" id="estudiantesPosgrado">
+			<thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Apellidos y nombre</th>
+                    <th>Evaluación</th>
+                </tr>
+			</thead>
+			<tbody>
+                <tr>
+                    <td scope="row"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+			</tbody>
+		</table>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+    <script>
+        var data = [];
+        $(document).ready(function() {
+            $('#estudiantesPosgrado').DataTable({
+                responsive: true,
+                autoWidth: false,
+                language:{
+                    "url": "{% static 'datatable/datatable_spanish.json' %}"
+                },
+                data: data
+            });
+
+            $('#selectPrograma').change({
+                var valor = $(this).val();
+                alert(valor);
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'buscar',
+                        'term' : valor
+                    },
+                    dataType: 'json'
+                }).done(function(data){
+                    response(data);
+                }).fail(function(jqXHR, textStatus, errorThrown){
+                    alert(textStatus + ': ' + errorThrown);
+                })
+            });
+        });
+
+        $(document).on('ready',function(){
+
+            $('#estado').on('change',function(){
+              var url = "buscar2.php";                                      
+          
+              $.ajax({                        
+                 type: "POST",                 
+                 url: url,                    
+                 data: $("#formulario").serialize(),
+                 success: function(data)            
+                 {
+                   $('#resp').html(data);           
+                 }
+               });
+            });
+          });
+
+    </script>
+{% endblock javascript %}
