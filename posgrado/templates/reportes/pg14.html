@@ -7,14 +7,20 @@
 	<script type="text/javascript" src=" {% static 'datatable/DataTables-1.13.1/js/dataTables.bootstrap4.min.js' %}"></script>
 	<script type="text/javascript" src=" {% static 'datatable/Responsive-2.4.0/js/dataTables.responsive.min.js' %}"></script>
 	<script type="text/javascript" src=" {% static 'datatable/Responsive-2.4.0/js/responsive.bootstrap4.js' %}"></script>
-{% endblock head %}
+
+    {% comment %} Select2 {% endcomment %}
+    <link rel="stylesheet" href="{% static 'select2-4.0.13/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'select2-4.0.13/css/select2-bootstrap4.min.css'%}"/>
+	<script src="{% static 'select2-4.0.13/js/select2.min.js' %}"></script>
+	<script src="{% static 'select2-4.0.13/js/i18n/es.js' %}"></script>
+    {% endblock head %}
 
 {% block content %}
 <div class="card">
   <div class="card-body">
     <div class="form-group">
         <label for="selectPrograma">Seleccione un programa de posgrado</label>
-        <select class="form-control" id="selectPrograma">
+        <select class="form-control select2" id="selectPrograma">
             {% for posgrado in data.posgrados %}
                 <option value="{{posgrado.id}}">{{posgrado.nombre}}</option>
             {% endfor %}
@@ -46,7 +52,7 @@
     <script>
         var data = [];
         $(document).ready(function() {
-            $('#estudiantesPosgrado').DataTable({
+            var tabla = $('#estudiantesPosgrado').DataTable({
                 responsive: true,
                 autoWidth: false,
                 language:{
@@ -55,7 +61,50 @@
                 data: data
             });
 
-            $('#selectPrograma').change({
+            $('.select2').select2({
+                theme: "bootstrap4",
+                language: 'es'
+            });
+
+            var select_products = $('select[id="selectPrograma"]');
+            select_products.on('change', function () {
+                var value = select_products.select2('data');
+                var id = value[0].id;
+                console.log(id);
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'filtrar_posgrado',
+                        'id' : id
+                    },
+                    dataType: 'json'
+                }).done(function(data){
+                    if (!data.hasOwnProperty('error')) {
+                        // console.log(data);
+                        tabla.clear();
+                        for (const item of data) {
+                            var elemento = {
+                                'numero': 'numero',
+                                'nombre':item.nombre, 
+                                // 'ap1': i.persona.apellido1,
+                                // 'ap2': i.persona.apellido2,
+                                'eval':item.eval
+                            };
+                            console.log(elemento);
+
+                            tabla.rows.add([elemento]);
+                        }
+                        //console.log(this.data);
+                        return false;
+                    }
+                    message_error(data.error);
+                }).fail(function(jqXHR, textStatus, errorThrown){
+                    alert(textStatus + ': ' + errorThrown);
+                });
+            });
+
+            /*$('#selectPrograma').change(function(){
                 var valor = $(this).val();
                 alert(valor);
                 $.ajax({
@@ -71,10 +120,12 @@
                 }).fail(function(jqXHR, textStatus, errorThrown){
                     alert(textStatus + ': ' + errorThrown);
                 })
-            });
+            });*/
+
+            
         });
 
-        $(document).on('ready',function(){
+        /*$(document).on('ready',function(){
 
             $('#estado').on('change',function(){
               var url = "buscar2.php";                                      
@@ -89,7 +140,7 @@
                  }
                });
             });
-          });
+          });*/
 
     </script>
 {% endblock javascript %}
