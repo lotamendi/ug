@@ -7,14 +7,20 @@
 	<script type="text/javascript" src=" {% static 'datatable/DataTables-1.13.1/js/dataTables.bootstrap4.min.js' %}"></script>
 	<script type="text/javascript" src=" {% static 'datatable/Responsive-2.4.0/js/dataTables.responsive.min.js' %}"></script>
 	<script type="text/javascript" src=" {% static 'datatable/Responsive-2.4.0/js/responsive.bootstrap4.js' %}"></script>
-{% endblock head %}
+
+    {% comment %} Select2 {% endcomment %}
+    <link rel="stylesheet" href="{% static 'select2-4.0.13/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'select2-4.0.13/css/select2-bootstrap4.min.css'%}"/>
+	<script src="{% static 'select2-4.0.13/js/select2.min.js' %}"></script>
+	<script src="{% static 'select2-4.0.13/js/i18n/es.js' %}"></script>
+    {% endblock head %}
 
 {% block content %}
 <div class="card">
   <div class="card-body">
     <div class="form-group">
         <label for="selectPrograma">Seleccione un programa de posgrado</label>
-        <select class="form-control" id="selectPrograma">
+        <select class="form-control select2" id="selectPrograma">
             {% for posgrado in data.posgrados %}
                 <option value="{{posgrado.id}}">{{posgrado.nombre}}</option>
             {% endfor %}
@@ -44,52 +50,53 @@
 
 {% block javascript %}
     <script>
-        var data = [];
+        var datos = [];
         $(document).ready(function() {
-            $('#estudiantesPosgrado').DataTable({
+            var dataTable = $('#estudiantesPosgrado').DataTable({
                 responsive: true,
                 autoWidth: false,
                 language:{
                     "url": "{% static 'datatable/datatable_spanish.json' %}"
                 },
-                data: data
+                data: datos
             });
 
-            $('#selectPrograma').change({
-                var valor = $(this).val();
-                alert(valor);
+            $('.select2').select2({
+                theme: "bootstrap4",
+                language: 'es'
+            });
+
+            $('select[id="selectPrograma"]').change(function () {
+                var id = $(this).val();
+                console.log(id);
                 $.ajax({
                     url: window.location.pathname,
                     type: 'POST',
                     data: {
-                        'action': 'buscar',
-                        'term' : valor
+                        'action': 'filtrar_posgrado',
+                        'id' : id
                     },
                     dataType: 'json'
                 }).done(function(data){
-                    response(data);
+                    if (!data.hasOwnProperty('error')) {
+                        // aqui debe tomar data y ponerlo en el data del datatable
+                        console.log(data);
+                        // datatable = $('#estudiantesPosgrado').DataTable({
+                        //     responsive: true,
+                        //     autoWidth: false,
+                        //     language:{
+                        //         "url": "{% static 'datatable/datatable_spanish.json' %}"
+                        //     },
+                        //     data: data,
+                        // });
+                        // response(data);
+                        return false;
+                    }
+                    message_error(data.error);
                 }).fail(function(jqXHR, textStatus, errorThrown){
                     alert(textStatus + ': ' + errorThrown);
-                })
-            });
+                });
+            })
         });
-
-        $(document).on('ready',function(){
-
-            $('#estado').on('change',function(){
-              var url = "buscar2.php";                                      
-          
-              $.ajax({                        
-                 type: "POST",                 
-                 url: url,                    
-                 data: $("#formulario").serialize(),
-                 success: function(data)            
-                 {
-                   $('#resp').html(data);           
-                 }
-               });
-            });
-          });
-
     </script>
 {% endblock javascript %}

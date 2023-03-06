@@ -20,11 +20,19 @@ class Reporte_PG14_View(TemplateView):
         data = {}
         try:
             action = request.POST['action']
-            if action == 'buscar':
+            if action == 'filtrar_posgrado':
                 data = []
-                estudiantes = Matricula.objects.filter(posgrado=request.POST['term'])
+                estudiantes = Matricula.objects.filter(posgrado=request.POST['id'])
+                cont = 0
                 for i in estudiantes:
-                    data.append(i.persona.nombre)
+                    cont = cont + 1
+                    data.append({
+                        'no':cont, 
+                        'nombre':i.persona.nombre, 
+                        # 'ap1': i.persona.apellido1,
+                        # 'ap2': i.persona.apellido2,
+                        'eval': 'evaluacion'
+                        })
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data, safe=False)
