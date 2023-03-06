@@ -50,15 +50,15 @@
 
 {% block javascript %}
     <script>
-        var data = [];
+        var datos = [];
         $(document).ready(function() {
-            var tabla = $('#estudiantesPosgrado').DataTable({
+            var dataTable = $('#estudiantesPosgrado').DataTable({
                 responsive: true,
                 autoWidth: false,
                 language:{
                     "url": "{% static 'datatable/datatable_spanish.json' %}"
                 },
-                data: data
+                data: datos
             });
 
             $('.select2').select2({
@@ -66,10 +66,8 @@
                 language: 'es'
             });
 
-            var select_products = $('select[id="selectPrograma"]');
-            select_products.on('change', function () {
-                var value = select_products.select2('data');
-                var id = value[0].id;
+            $('select[id="selectPrograma"]').change(function () {
+                var id = $(this).val();
                 console.log(id);
                 $.ajax({
                     url: window.location.pathname,
@@ -81,66 +79,24 @@
                     dataType: 'json'
                 }).done(function(data){
                     if (!data.hasOwnProperty('error')) {
-                        // console.log(data);
-                        tabla.clear();
-                        for (const item of data) {
-                            var elemento = {
-                                'numero': 'numero',
-                                'nombre':item.nombre, 
-                                // 'ap1': i.persona.apellido1,
-                                // 'ap2': i.persona.apellido2,
-                                'eval':item.eval
-                            };
-                            console.log(elemento);
-
-                            tabla.rows.add([elemento]);
-                        }
-                        //console.log(this.data);
+                        // aqui debe tomar data y ponerlo en el data del datatable
+                        console.log(data);
+                        // datatable = $('#estudiantesPosgrado').DataTable({
+                        //     responsive: true,
+                        //     autoWidth: false,
+                        //     language:{
+                        //         "url": "{% static 'datatable/datatable_spanish.json' %}"
+                        //     },
+                        //     data: data,
+                        // });
+                        // response(data);
                         return false;
                     }
                     message_error(data.error);
                 }).fail(function(jqXHR, textStatus, errorThrown){
                     alert(textStatus + ': ' + errorThrown);
                 });
-            });
-
-            /*$('#selectPrograma').change(function(){
-                var valor = $(this).val();
-                alert(valor);
-                $.ajax({
-                    url: window.location.pathname,
-                    type: 'POST',
-                    data: {
-                        'action': 'buscar',
-                        'term' : valor
-                    },
-                    dataType: 'json'
-                }).done(function(data){
-                    response(data);
-                }).fail(function(jqXHR, textStatus, errorThrown){
-                    alert(textStatus + ': ' + errorThrown);
-                })
-            });*/
-
-            
+            })
         });
-
-        /*$(document).on('ready',function(){
-
-            $('#estado').on('change',function(){
-              var url = "buscar2.php";                                      
-          
-              $.ajax({                        
-                 type: "POST",                 
-                 url: url,                    
-                 data: $("#formulario").serialize(),
-                 success: function(data)            
-                 {
-                   $('#resp').html(data);           
-                 }
-               });
-            });
-          });*/
-
     </script>
 {% endblock javascript %}
