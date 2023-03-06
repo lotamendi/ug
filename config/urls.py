@@ -15,12 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-
 from boletin.views import IndexView
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', IndexView.as_view(), name="index"),
     path('login/', include('login.urls')),
     path('posgrado/', include('posgrado.urls')),
+    path('solapin/', include('solapin.urls')),
     path('admin/', admin.site.urls),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

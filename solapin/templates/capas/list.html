@@ -1,0 +1,64 @@
+{% extends 'capas/body.html' %}
+{% load static %}
+{% block head %}
+	<link rel="stylesheet" type="text/css" href=" {% static 'datatable/DataTables-1.13.1/css/dataTables.bootstrap4.min.css' %}"/>
+	<link rel="stylesheet" type="text/css" href=" {% static 'datatable/Responsive-2.4.0/css/responsive.bootstrap4.min.css' %}"/>
+	<script type="text/javascript" src=" {% static 'datatable/DataTables-1.13.1/js/jquery.dataTables.min.js' %}"></script>
+	<script type="text/javascript" src=" {% static 'datatable/DataTables-1.13.1/js/dataTables.bootstrap4.min.js' %}"></script>
+	<script type="text/javascript" src=" {% static 'datatable/Responsive-2.4.0/js/dataTables.responsive.min.js' %}"></script>
+	<script type="text/javascript" src=" {% static 'datatable/Responsive-2.4.0/js/responsive.bootstrap4.js' %}"></script>
+{% endblock head %}
+{% block content %}
+<div class="card card-primary">
+	{% comment %} <div class="card-header"> {% endcomment %}
+		{% comment %} <h3 class="card-title"> {% endcomment %}
+			{% comment %} <i class="fas fa-search"></i>
+			{{title}} {% endcomment %}
+		{% comment %} </h3> {% endcomment %}
+	{% comment %} </div> {% endcomment %}
+	<div class="card-body">
+		<table class="table" id="data">
+			<thead>
+                {% block columns %}
+
+                {% endblock columns %}
+			</thead>
+			<tbody>
+                {% block rows %}
+                {% endblock rows %}
+			</tbody>
+		</table>
+	</div>
+	<div class="card-footer">
+		<a class="btn btn-primary" href="{{create_url}}" role="button"><i class="fas fa-plus"></i> Nuevo registro</a>
+		<a class="btn btn-success" href="{{list_url}}" role="button"><i class="fas fa-sync-alt"></i> Actualizar</a>
+		{% comment %} <button type="button" class="btn btn-success swalDefaultSuccess">Click me</button> {% endcomment %}
+	</div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script>
+	$(document).ready(function() {
+		$('#data').DataTable({
+			responsive: true,
+			autoWidth: false,
+			language:{
+				"url": "{% static 'datatable/datatable_spanish.json' %}"
+			},
+		});
+		/*var Toast = Swal.mixin({
+		  toast: true,
+		  position: 'top-end',
+		  showConfirmButton: false,
+		  timer: 5000
+		});
+		$('.swalDefaultSuccess').click(function() {
+			Toast.fire({
+			  icon: 'success', // success,info, error, warning, question
+			  title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+			})
+		});*/
+	});
+</script>
+{% endblock javascript %}
