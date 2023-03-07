@@ -1,8 +1,12 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from solapin.forms import SolapinForm
 from solapin.models import SolapinPersona
+
+class SolapinDashboardView(TemplateView):
+    template_name = "solapin_dashboard.html"
+
 
 class SolapinListView(LoginRequiredMixin, ListView):
     model = SolapinPersona

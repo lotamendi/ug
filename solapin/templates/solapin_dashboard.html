@@ -1,0 +1,14 @@
+{% extends 'capas/body.html' %}
+
+{% block content %}
+<a class="btn btn-primary" href="{% url 'solapin_list' %}" role="button">Gestionar personas para solapines</a>
+<button id="btn_generar" type="button" class="btn btn-danger">Generar solapines</button>
+{% endblock content %}
+
+{% block javascript %}
+    <script>        
+        $('button[id="btn_generar"]').click(function () {
+            alert("Próximamente");
+        });
+    </script>
+{% endblock javascript %}

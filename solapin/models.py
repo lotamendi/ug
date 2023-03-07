@@ -7,14 +7,15 @@ def user_directory_path(instance, filename):
 
 class SolapinPersona(models.Model):
     no = models.IntegerField(primary_key=True)
-    nombre = models.CharField(max_length=255)
+    nombre = models.CharField(max_length=255, verbose_name='Nombre y apellidos')
     cargo = models.CharField(max_length=255)
-    area_general = models.CharField(max_length=255)
-    area_trabajo = models.CharField(max_length=255)
+    area_general = models.CharField(max_length=255, verbose_name='Área general')
+    area_trabajo = models.CharField(max_length=255, verbose_name='Área de trabajo')
     foto = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
+    libre_acceso = models.BooleanField(default=False)
+    diseno_superior = models.BooleanField(default=False, verbose_name='Diseño superior (Solo para Rectoría y Vicerrectoría)')
 
     class Meta:
-        managed = False
         db_table = 'solapin_persona'
 
     def get_image(self):
