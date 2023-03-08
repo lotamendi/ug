@@ -1,8 +1,71 @@
 {% extends 'capas/body.html' %}
 
 {% block content %}
-<a class="btn btn-primary" href="{% url 'solapin_list' %}" role="button">Gestionar personas para solapines</a>
-<button id="btn_generar" type="button" class="btn btn-danger">Generar solapines</button>
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Bienvenid@ <small>{{request.user.first_name}} {{request.user.last_name}}</small></h1>
+        </div>
+      </div>
+    </div>
+  </div>
+<section class="content>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Usuarios en total</span>
+                        <span class="info-box-number">{{total_usuarios}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-camera"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Usuarios sin foto</span>
+                        <span class="info-box-number">
+                            {{usuarios_sin_foto}}
+                            <small>para un {{usuarios_sin_foto_porciento|floatformat}}%</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix hidden-md-up"></div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-lock-open"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Libre acceso</span>
+                        <span class="info-box-number">{{libre_acceso}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-level-up-alt"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Rectoría y vicerrectoría</span>
+                        <span class="info-box-number">{{diseno_superior}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="btn btn-primary" href="{% url 'solapin_list' %}" role="button">
+            <i class="fas fa-cog"></i>
+            Gestionar personas para solapines
+        </a>
+        <button id="btn_generar" type="button" class="btn btn-danger">
+            <i class="fas fa-file-export "></i>
+            Generar solapines
+        </button>
+    </div>
+</section>
+
+
 {% endblock content %}
 
 {% block javascript %}
