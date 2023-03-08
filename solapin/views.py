@@ -3,6 +3,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, T
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from solapin.forms import SolapinForm
+from solapin.mixins import ValidatePermissionRequiredMixin
 from solapin.models import SolapinPersona
 
 class SolapinDashboardView(TemplateView):
@@ -19,9 +20,11 @@ class SolapinDashboardView(TemplateView):
 
 
 
-class SolapinListView(LoginRequiredMixin, ListView):
+class SolapinListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = SolapinPersona
     template_name = "list.html"
+    permission_required = 'solapin.view_solapinpersona'
+    url_redirect = 'solapin_dashboard'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -29,11 +32,14 @@ class SolapinListView(LoginRequiredMixin, ListView):
         context['create_url'] = reverse_lazy('solapin_create')
         context['list_url'] = reverse_lazy('solapin_list')
         return context
-class SolapinCreateView(CreateView):
+    
+class SolapinCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
     model = SolapinPersona
     form_class = SolapinForm
     template_name = "create.html"
     success_url = reverse_lazy('solapin_list')
+    permission_required = 'solapin.add_solapinpersona'
+    url_redirect = 'solapin_dashboard'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -42,21 +48,28 @@ class SolapinCreateView(CreateView):
         context['action'] = 'add'
         return context
         
-class SolapinUpdateView(UpdateView):
+class SolapinUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
     model = SolapinPersona
     template_name = "create.html"
     form_class = SolapinForm
     success_url = reverse_lazy('solapin_list')
+    permission_required = 'solapin.change_solapinpersona'
+    url_redirect = 'solapin_dashboard'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Editar persona para solapín'
         context['list_url'] = reverse_lazy('solapin_list')
         context['action'] = 'update'
         return context
-class SolapinDeleteView(DeleteView):
+    
+class SolapinDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DeleteView):
     model = SolapinPersona
     template_name = "delete.html"
     success_url = reverse_lazy('solapin_list')
+    permission_required = 'solapin.delete_solapinpersona'
+    url_redirect = 'solapin_dashboard'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Eliminar persona para solapín'
