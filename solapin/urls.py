@@ -8,4 +8,5 @@ urlpatterns = [
     path('add/', SolapinCreateView.as_view(), name='solapin_create'),
     path('update/<int:pk>/', SolapinUpdateView.as_view(), name='solapin_update'),
     path('delete/<int:pk>/', SolapinDeleteView.as_view(), name='solapin_delete'),
+    path('generate/<int:pk>/', SolapinGenerateView.as_view(), name='solapin_generate'),
 ]
