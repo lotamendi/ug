@@ -58,10 +58,12 @@
             <i class="fas fa-cog"></i>
             Gestionar personas para solapines
         </a>
-        <button id="btn_generar" type="button" class="btn btn-danger">
+        <a class="btn btn-danger" href="{% url 'solapin_generate_all' %}" role="button">
             <i class="fas fa-file-export "></i>
             Generar solapines
-        </button>
+        </a>
+        <!-- <button id="btn_generar" type="button" class="btn btn-danger">
+        </button> -->
     </div>
 </section>
 
@@ -72,6 +74,14 @@
     <script>        
         $('button[id="btn_generar"]').click(function () {
             alert("Próximamente");
+            $.ajax({
+                url: "{% url 'solapin_generate_all' %}",
+                type: 'POST',
+            }).done( function (data){
+                console.log(data);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            });
         });
     </script>
 {% endblock javascript %}

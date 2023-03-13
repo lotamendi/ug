@@ -1,6 +1,23 @@
 {% extends 'capas/body.html' %}
 
 {% block content %}
-    Generado
-    {{imagen}}
+<div class="card">
+    <form action="." method="post">
+        {% csrf_token %}
+        <div class="card-header">
+            <h4 class="card-title">Solapín generado</h4>
+        </div>
+        <div class="card-body text-center">
+            <img style="width: 200px; height: fit-content;" src="{{solapin_generado}}" alt="Solapín" />
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary"> <i class="fas fa-save"></i> Guardar solapín</button>
+          <a class="btn btn-secondary" href="{{list_url}}" role="button"> <i class="fas fa-times"></i> Cancelar</a>
+        </div>
+    </form>
+</div>
+    <!-- <div class="alert alert-success" role="alert">
+        <h5><i class="fa fa-check mr-2" aria-hidden="true"></i>Hecho</h5>
+        <strong>Solapín generado satisfactoriamente.</strong>
+    </div> -->
 {% endblock content %}
