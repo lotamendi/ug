@@ -17,7 +17,6 @@
   {% endblock javascript %}
   <script type='application/javascript'>
     {% if messages %}
-        var html = '';
         var Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -25,13 +24,12 @@
             timer: 5000
         });
         {% for message in messages %}
-            html += '{{message}}\n';
+            Toast.fire({
+                icon: '{{message.tags}}', // success,info, error, warning, question
+                title: '',
+                text: '{{message}}'
+            })
         {% endfor %}
-        Toast.fire({
-            icon: 'error', // success,info, error, warning, question
-            title: 'Error',
-            text: html
-        })
     {% endif %}
     </script>
 </body>

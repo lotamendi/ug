@@ -35,9 +35,11 @@
 				<a class="btn btn-danger" href="{% url 'solapin_delete' solapin_persona.no %}">
 					<i class="fas fa-trash-alt"></i>
 				</a>
+				{% if solapin_persona.get_image != '/media/solapin/sin_foto.jpg' %}
 				<a class="btn btn-info" href="{% url 'solapin_generate' solapin_persona.no %}">
 					<i class="fas fa-id-card-alt"></i>
 				</a>
+				{% endif %}
 			</div>
 		</td>
 		</tr>
