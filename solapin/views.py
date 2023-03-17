@@ -157,7 +157,7 @@ def generar_solapin(datos, request) -> Image:
 def guarda_fichero(imagen: Image, titulo, request):
         rgb_img = imagen.convert('RGB')
         downloads_path = str(pathlib.Path.home() / "Downloads")
-        rgb_img.save(os.path.join(downloads_path, titulo), format="JPEG")
+        rgb_img.save(os.path.join(downloads_path, titulo), format="JPEG", quality=100)
       
 class SolapinGenerateView(TemplateView):
     template_name = "generate.html"
