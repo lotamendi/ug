@@ -8,19 +8,41 @@
             Están listos {{solapines.count}} solapines para generar.
             <strong>¿Desea proceder a generarlos?</strong>
         </div>
-        <hr>
+        {% comment %} <hr>
         <div class="progress">
             <div class="progress-bar bg-info progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
             </div>
         </div>
-        <span>40% Completado</span>
+        <span>40% Completado</span> {% endcomment %}
     </div>
     <div class="card-footer">
-        <button type="button" class="btn btn-info">
+        <button type="button" class="btn btn-info" id='btn-generateAll'>
             <i class="fas fa-id-card-alt"></i> Generar solapines!
         </button>
-        <a class="btn btn-secondary" href="{{list_url}}" role="button"> <i class="fas fa-times"></i> Cancelar</a>
+        <a class="btn btn-secondary" href="{% url 'solapin_dashboard' %}" role="button"> <i class="fas fa-times"></i> Cancelar</a>
     </div>
 </div>
 
 {% endblock content %}
+
+{% block javascript %}
+    <script type="application/javascript">
+        $(function () {
+            $('#btn-generateAll').on('click',function () {
+                // alert('prueba');
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'solapin_generate_all' %}',
+                    data: '', // {{solapines}}
+                    dateType: 'json'
+                }).done(function (data) {
+                    console.log(data);
+                }).fail(function () {
+                    alert('error');
+                }).always(function () {
+                    // alert('completado');
+                })
+            });
+        });
+    </script>
+{% endblock javascript %}

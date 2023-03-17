@@ -2,7 +2,7 @@ import os
 import base64
 from io import BytesIO
 import pathlib
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
@@ -87,7 +87,78 @@ class SolapinDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Del
         return context
 
 
+def generar_solapin(datos, request) -> Image:
+    diseno_superior = datos['diseno_superior']
+    image = Image.open('static/UG/img/solapin/diseno1_limpio.png').convert('RGBA')
+    if datos['diseno_superior'] == True:
+        image = Image.open('static/UG/img/solapin/diseno2_limpio.png').convert('RGBA')
+    
+    def cortar_texto(texto: str, max_caracteres: int):
+        salida = ''
+        arreglo_palabras = texto.split(' ')
+        linea = ''
+        for palabra in arreglo_palabras:
+            if len(linea) == 0:
+                linea += palabra + ' '
+            else:
+                if len(linea)+len(palabra) < max_caracteres:
+                    linea += palabra + ' '
+                else:
+                    salida += linea + '\n'
+                    linea = palabra + ' '
+        salida += linea
+        return salida
+    
+    def texto_area_general(texto):
+        draw = ImageDraw.Draw(image)
+        if diseno_superior:
+            font = ImageFont.truetype("static/UG/font/AGaramondPro-Bold.otf", 25)
+            draw.multiline_text((33, 125), cortar_texto(str.upper(texto), 30) , font=font, fill="red")
+        else:
+            font = ImageFont.truetype("static/UG/font/AGaramondPro-Regular.otf", 25)
+            draw.multiline_text((33, 125), cortar_texto(texto, 30) , font=font, fill="white")
 
+    def texto_normal(texto, coordenadas):
+        draw = ImageDraw.Draw(image)
+        font = ImageFont.truetype("static/UG/font/Aller_Rg.ttf", 20)
+        draw.text(coordenadas, cortar_texto(str.title(texto),40) , font=font, fill="black")
+
+    def imagen_foto(ruta: str):
+        im1 = image
+        im2 = Image.open(ruta).resize((174,186))
+        mask_im = Image.new("1", im2.size, 0)
+        draw = ImageDraw.Draw(mask_im)
+        draw.rectangle((0, 0, 354, 354), fill=255)
+        im1.paste(im2,(22,203), mask_im)
+
+    def firma_escaneada():
+        im1 = image
+        im2 = Image.open('static/UG/img/solapin/firma_RRHH.jpg').resize((152,62))
+        mask_im = Image.new("1", im2.size, 0)
+        draw = ImageDraw.Draw(mask_im)
+        draw.rectangle((0, 0, 378, 340), fill=255)
+        im1.paste(im2,(236,288), mask_im)
+
+    def texto_libre_acceso():
+        draw = ImageDraw.Draw(image)
+        font = ImageFont.truetype("static/UG/font/Aller_Rg.ttf", 40)
+        draw.multiline_text((240, 200), cortar_texto('LIBRE \nACCESO', 20) , font=font, fill="black", align="center")
+
+    texto_area_general(datos['area_general'])
+    texto_normal(datos['nombre'], (36, 430))
+    texto_normal(datos['cargo'], (36, 490))
+    texto_normal(datos['area_trabajo'], (36, 555))
+    imagen_foto(datos['foto'])
+    firma_escaneada()
+    if datos['libre_acceso']:
+        texto_libre_acceso()
+    return image
+
+def guarda_fichero(imagen: Image, titulo, request):
+        rgb_img = imagen.convert('RGB')
+        downloads_path = str(pathlib.Path.home() / "Downloads")
+        rgb_img.save(os.path.join(downloads_path, titulo), format="JPEG")
+      
 class SolapinGenerateView(TemplateView):
     template_name = "generate.html"
     image = Image.open('static/UG/img/solapin/diseno1_limpio.png')
@@ -102,7 +173,6 @@ class SolapinGenerateView(TemplateView):
         rgb_img.save(output, format="JPEG")
         image_data = base64.b64encode(output.getvalue())
         if not isinstance(image_data, str):
-            # Python 3, decode from bytes to string
             image_data = image_data.decode()
         data_url = 'data:image/jpg;base64,' + image_data
         context["solapin_generado"] = data_url
@@ -111,7 +181,9 @@ class SolapinGenerateView(TemplateView):
     
     @method_decorator(csrf_exempt)
     def post(self, request, *args, **kwargs):
-        self.guarda_fichero(request)
+        titulo = '{}-{}.jpg'.format(self.datos['no'], self.datos['nombre']).replace(' ','_')
+        guarda_fichero(self.image, titulo, request)
+        messages.add_message(request, messages.SUCCESS, '{} {}'.format('Solapín guardado satisfactoriamente.', titulo))
         return HttpResponseRedirect(self.success_url)
     
     def dispatch(self, request, *args, **kwargs):
@@ -129,88 +201,42 @@ class SolapinGenerateView(TemplateView):
         if self.datos['foto'] == '' or os.path.isfile(str(self.datos['foto'])):
             messages.add_message(request, messages.ERROR, '{} {}'.format('No se ha encontrado la foto en la ruta especificada.', self.datos['foto']))
             return redirect(self.success_url)
-        self.generar_solapin(self.datos, request)
+        self.image = generar_solapin(self.datos, request)
         return super().dispatch(request, *args, **kwargs)
-        
-    def generar_solapin(self, datos, request):
-        self.diseno_superior = datos['diseno_superior']
-        if datos['diseno_superior'] == True:
-            self.image = Image.open('static/UG/img/solapin/diseno2_limpio.png').convert('RGBA')
-        else:
-            self.image = Image.open('static/UG/img/solapin/diseno1_limpio.png').convert('RGBA')
-        self.texto_area_general(datos['area_general'])
-        self.texto_normal(datos['nombre'], (36, 430))
-        self.texto_normal(datos['cargo'], (36, 490))
-        self.texto_normal(datos['area_trabajo'], (36, 555))
-        self.imagen_foto(datos['foto'])
-        self.firma_escaneada()
-        if datos['libre_acceso']:
-            self.texto_libre_acceso()
-
-    def texto_area_general(self, texto):
-        draw = ImageDraw.Draw(self.image)
-        if self.diseno_superior:
-            font = ImageFont.truetype("static/UG/font/AGaramondPro-Bold.otf", 25)
-            draw.multiline_text((33, 125), self.cortar_texto(str.upper(texto), 30) , font=font, fill="red")
-        else:
-            font = ImageFont.truetype("static/UG/font/AGaramondPro-Regular.otf", 25)
-            draw.multiline_text((33, 125), self.cortar_texto(texto, 30) , font=font, fill="white")
-    
-    def texto_normal(self, texto, coordenadas):
-        draw = ImageDraw.Draw(self.image)
-        font = ImageFont.truetype("static/UG/font/Aller_Rg.ttf", 20)
-        draw.text(coordenadas, self.cortar_texto(str.title(texto),40) , font=font, fill="black")
-    
-    def texto_libre_acceso(self):
-        draw = ImageDraw.Draw(self.image)
-        font = ImageFont.truetype("static/UG/font/Aller_Rg.ttf", 40)
-        draw.multiline_text((240, 200), self.cortar_texto('LIBRE \nACCESO', 20) , font=font, fill="black", align="center")
-
-    def imagen_foto(self, ruta: str):
-        im1 = self.image
-        im2 = Image.open(ruta).resize((174,186))
-        mask_im = Image.new("1", im2.size, 0)
-        draw = ImageDraw.Draw(mask_im)
-        draw.rectangle((0, 0, 354, 354), fill=255)
-        im1.paste(im2,(22,203), mask_im)
-
-    def firma_escaneada(self):
-        im1 = self.image
-        im2 = Image.open('static/UG/img/solapin/firma_RRHH.jpg').resize((152,62))
-        mask_im = Image.new("1", im2.size, 0)
-        draw = ImageDraw.Draw(mask_im)
-        draw.rectangle((0, 0, 378, 340), fill=255)
-        im1.paste(im2,(236,288), mask_im)
-
-    def cortar_texto(self, texto: str, max_caracteres: int):
-        salida = ''
-        arreglo_palabras = texto.split(' ')
-        linea = ''
-        for palabra in arreglo_palabras:
-            if len(linea) == 0:
-                linea += palabra + ' '
-            else:
-                if len(linea)+len(palabra) < max_caracteres:
-                    linea += palabra + ' '
-                else:
-                    salida += linea + '\n'
-                    linea = palabra + ' '
-        salida += linea
-        return salida
-    
-    def guarda_fichero(self, request):
-        titulo = '{}-{}.jpg'.format(self.datos['no'], self.datos['nombre']).replace(' ','_')
-        rgb_img = self.image.convert('RGB')
-        downloads_path = str(pathlib.Path.home() / "Downloads")
-        rgb_img.save(os.path.join(downloads_path, titulo), format="JPEG")
-        messages.add_message(request, messages.SUCCESS, '{} {}'.format('Solapín guardado satisfactoriamente.', titulo))
         
 class SolapinGenerateAllView(TemplateView):
     template_name = "generateAll.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['list_url'] = reverse_lazy('solapin_list')
         context["solapines"] = SolapinPersona.objects.all().exclude(Q(foto__isnull = True) | Q(foto = ''))
         return context
     
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        data = SolapinPersona.objects.all().exclude(Q(foto__isnull = True) | Q(foto = ''))
+        image = Image.open('static/UG/img/solapin/diseno1_limpio.png')
+        datos = {}
+        contador = 0;
+        for i in data:
+            titulo = '{}-{}.jpg'.format(i.no, i.nombre).replace(' ','_')
+            print('Generando', titulo)
+            datos = {
+                "no":i.no,
+                "nombre":i.nombre,
+                "cargo":i.cargo,
+                "area_general":i.area_general,
+                "area_trabajo":i.area_trabajo,
+                "foto":i.foto,
+                'libre_acceso' : i.libre_acceso,
+                'diseno_superior': i.diseno_superior
+            }
+            image = generar_solapin(datos, request)
+            guarda_fichero(image, titulo, request)
+            contador = contador + 1
+        messages.add_message(request, messages.SUCCESS, 'Proceso completado. '
+                            'Se han guardado {} de {} solapines'.format(contador, data.count()))
+        return HttpResponseRedirect(reverse_lazy('solapin_dashboard'))

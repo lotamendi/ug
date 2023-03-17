@@ -66,22 +66,4 @@
         </button> -->
     </div>
 </section>
-
-
 {% endblock content %}
-
-{% block javascript %}
-    <script>        
-        $('button[id="btn_generar"]').click(function () {
-            alert("Próximamente");
-            $.ajax({
-                url: "{% url 'solapin_generate_all' %}",
-                type: 'POST',
-            }).done( function (data){
-                console.log(data);
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            });
-        });
-    </script>
-{% endblock javascript %}
