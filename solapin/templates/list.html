@@ -22,9 +22,13 @@
 		</td>
 		<td>{{ solapin_persona.area_general }}<br>{{ solapin_persona.area_trabajo }}</td>
 		<td>
-			<img src="{{ solapin_persona.get_image }}" class="img-fluid d-block mx-auto" style="max-width: 70px; height: auto">
 			{% if solapin_persona.get_image == '/media/solapin/sin_foto.jpg' %}
-				<div style="text-align: center;">Sin foto</div>
+			<img src="{{ solapin_persona.get_image }}" class="img-fluid d-block mx-auto" style="max-width: 70px; height: auto">
+			<div style="text-align: center;">Sin foto</div>
+			{% else %}
+			<a href="{{ solapin_persona.get_image }}" target="_blank">
+				<img src="{{ solapin_persona.get_image }}" class="img-fluid d-block mx-auto" style="max-width: 70px; height: auto">
+			</a>
 			{% endif %}
 		</td>
 		<td>
