@@ -3,22 +3,40 @@
 {% block columns %}
 	<tr>
 	<th scope="col">Nombre</th>
-	<th scope="col">Código</th>
+	<th scope="col">Descripción</th>
+	{% comment %} <th scope="col">Código</th>
 	<th scope="col">Facultad</th>
 	<th scope="col">Modalidad</th>
 	<th scope="col">Forma</th>
 	<th scope="col">Ejecutado en CUM</th>
 	<th scope="col">Ejecutado en otro país</th>
-	<th scope="col">Inicio</th>
-	<th scope="col">Final</th>     
+	<th scope="col">Inicio</th> {% endcomment %}
+	<th scope="col">Fechas</th>     
 	<th scope="col">Opciones</th>     
 	</tr>
 {% endblock columns %} 
 {% block rows %} 
 	{% for posgrado in object_list %}
 		<tr>
-		<th scope="row">{{ posgrado.nombre }}</th>
-		<td>{{ posgrado.codigo }}</td>
+		<th scope="row">{{ posgrado }}</th>
+		<td>
+			<strong>Código:</strong> {{ posgrado.codigo }}<br>
+			<strong>Facultad:</strong> {{ posgrado.facultad }}<br>
+			<strong>Forma:</strong> {{ posgrado.forma }}<br>
+			<strong>Ejecutado en CUM: </strong>
+				{% if posgrado.cum == True %}
+					<span class="badge bg-success">Si</span>
+				{% else %}
+					<span class="badge bg-danger">No</span>
+				{% endif %}<br>
+			<strong>Ejecutado en otro país: </strong>
+				{% if posgrado.pais == True %}
+					<span class="badge bg-success">Si</span>
+				{% else %}
+					<span class="badge bg-danger">No</span>
+				{% endif %}	
+		</td>
+		{% comment %} <td>{{ posgrado.codigo }}</td>
 		<td>{{ posgrado.facultad }}</td>
 		<td>{{ posgrado.modalidad }}</td>
 		<td>{{ posgrado.forma }}</td>
@@ -35,9 +53,11 @@
 			{% else %}
 				<span class="badge bg-danger">No</span>
 			{% endif %}	
+		</td> {% endcomment %}
+		<td>
+			Inicio: {{ posgrado.fecha_inicio }}<br>
+			Fin: {{ posgrado.fecha_fin }}
 		</td>
-		<td>{{ posgrado.fecha_inicio }}</td>
-		<td>{{ posgrado.fecha_fin }}</td>
 		<td>
 			<div class="btn-group btn-group-sm" role="group">
 				<a class="btn btn-warning" href="{% url 'posgrado_update' posgrado.id %}">

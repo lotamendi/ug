@@ -4,6 +4,7 @@ from posgrado.views import *
 
 urlpatterns = [
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    path('', DashboardView.as_view(), name='dashboard'),
     # Clasificadores
     path('clasificadores/', include('posgrado.templates.clasificadores.urls')),
     # Modelos
@@ -20,5 +21,6 @@ urlpatterns = [
     path('matricula/update/<int:pk>/', MatriculaUpdateView.as_view(), name='matricula_update'),
     path('matricula/delete/<int:pk>/', MatriculaDeleteView.as_view(), name='matricula_delete'),
     # Reportes
-    path('reports/pg14/', Reporte_PG14_View.as_view(), name='rep_pg14')
+    path('reports/pg14/', Reporte_PG14_View.as_view(), name='rep_pg14'),
+    path('reports/pg14/generate-pdf/<int:id>/', generate_pdf, name='generate-pdf')
 ]

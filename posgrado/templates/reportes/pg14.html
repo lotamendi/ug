@@ -17,49 +17,80 @@
 
 {% block content %}
 <div class="card">
-  <div class="card-body">
-    <div class="form-group">
-        <label for="selectPrograma">Seleccione un programa de posgrado</label>
-        <select class="form-control select2" id="selectPrograma">
-            {% for posgrado in data.posgrados %}
-                <option value="{{posgrado.id}}">{{posgrado.nombre}}</option>
-            {% endfor %}
-        </select>
+    <div class="card-body">
+        <div class="form-group">
+            <label for="selectPrograma">Programa de posgrado</label>
+            <select class="form-control select2" id="selectPrograma">
+                <option value="">-----Seleccione un programa----</option>
+                <!-- TODO: Deshabilitar la primera opcion del select2 -->
+                {% for posgrado in data.posgrados %}
+                    <option value="{{posgrado.id}}">{{posgrado}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <table class="table" id="estudiantesPosgrado">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Apellidos y nombre</th>
+                        <th>Evaluación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td scope="row"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" id="btn-generar-reporte">Generar reporte</button>
+            <a href="#" class="btn btn-danger" id="btn-generar-pdf">Otro</a>
+        </div>
     </div>
-    <div class="form-group">
-        <table class="table" id="estudiantesPosgrado">
-			<thead>
-                <tr>
-                    <th>No.</th>
-                    <th>Apellidos y nombre</th>
-                    <th>Evaluación</th>
-                </tr>
-			</thead>
-			<tbody>
-                <tr>
-                    <td scope="row"></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-			</tbody>
-		</table>
-    </div>
-  </div>
 </div>
 {% endblock content %}
 
 {% block javascript %}
     <script>
-        var datos = [];
-        $(document).ready(function() {
-            var dataTable = $('#estudiantesPosgrado').DataTable({
+        // var datos = [];
+        var dataTable;
+        var id_programa = 0
+        function getData(programa){
+            if(dataTable){
+                dataTable.destroy();
+            }
+            dataTable = $('#estudiantesPosgrado').DataTable({
                 responsive: true,
                 autoWidth: false,
                 language:{
                     "url": "{% static 'datatable/datatable_spanish.json' %}"
                 },
-                data: datos
+                ajax:{
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'filtrar_posgrado',
+                        'id' : programa
+                    },
+                    dataSrc: ""
+                },
+                columns: [
+                    {"data":"no"},
+                    {"data":"nombre"},
+                    {"data":"eval"},
+                ], initComplete: function(settings, json){
+                    // console.log(settings, json);
+                    // datos = json;
+                }
             });
+        }
+        getData(id_programa);
+
+        $(document).ready(function() {
 
             $('.select2').select2({
                 theme: "bootstrap4",
@@ -67,35 +98,29 @@
             });
 
             $('select[id="selectPrograma"]').change(function () {
-                var id = $(this).val();
-                console.log(id);
-                $.ajax({
-                    url: window.location.pathname,
-                    type: 'POST',
-                    data: {
-                        'action': 'filtrar_posgrado',
-                        'id' : id
-                    },
-                    dataType: 'json'
-                }).done(function(data){
-                    if (!data.hasOwnProperty('error')) {
-                        // aqui debe tomar data y ponerlo en el data del datatable
-                        console.log(data);
-                        // datatable = $('#estudiantesPosgrado').DataTable({
-                        //     responsive: true,
-                        //     autoWidth: false,
-                        //     language:{
-                        //         "url": "{% static 'datatable/datatable_spanish.json' %}"
-                        //     },
-                        //     data: data,
-                        // });
-                        // response(data);
-                        return false;
-                    }
-                    message_error(data.error);
-                }).fail(function(jqXHR, textStatus, errorThrown){
-                    alert(textStatus + ': ' + errorThrown);
-                });
+                id_programa = $(this).val();
+                if(id_programa != '')
+                    getData(id_programa);
+                    document.getElementById("btn-generar-pdf").href = 'generate-pdf/' + id_programa;
+                    document.getElementById("btn-generar-pdf").target="_blank";
+            })
+        });
+
+        $('#btn-generar-reporte').on('click',function () {
+            $.ajax({
+                url: window.location.pathname,
+                type: 'POST',
+                data: {
+                    'action': 'generate_report',
+                    'id': id_programa,
+                },
+                dataSrc: '',
+            }).done(function (data) {
+                console.log(data);
+            }).fail(function () {
+                alert('error');
+            }).always(function () {
+                // alert('completado');
             })
         });
     </script>

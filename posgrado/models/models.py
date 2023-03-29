@@ -3,9 +3,11 @@ from django.urls import reverse
 
 from posgrado.models.clasif import Organismo, Pais, Programa, Facultad, FormaPosgrado
 from posgrado.models.choices import *
+from utils.number_to_roman import printRoman
 
 class Posgrado(models.Model):
     nombre = models.CharField(max_length = 200, blank=False)
+    edicion = models.IntegerField(default=1, verbose_name="Edición")
     codigo = models.ForeignKey(Programa, on_delete=models.CASCADE)
     facultad = models.ForeignKey(Facultad, on_delete=models.CASCADE, blank=False, default=0)
     modalidad = models.CharField(max_length=15, choices=modalidad_choices)
@@ -22,8 +24,8 @@ class Posgrado(models.Model):
         ordering = ['nombre']
 
     def __str__(self):
-        return self.nombre
-        return self.nombre + ', ' + self.edicion + ' Edición'
+        # return self.nombre
+        return f'{self.nombre}, {printRoman(self.edicion)} Edición'
 
 class Persona(models.Model):
     CI = models.CharField(primary_key=True, max_length=11)
@@ -51,6 +53,7 @@ class Matricula(models.Model):
     organismo = models.ForeignKey(Organismo, on_delete=models.CASCADE)
     posgrado = models.ForeignKey(Posgrado, on_delete=models.CASCADE)
     graduado = models.BooleanField(default=False)
+    evaluacion = models.IntegerField(default=0, choices=evaluacion_choices, verbose_name='Evaluación')
 
     class Meta:
         verbose_name = "matricula"
